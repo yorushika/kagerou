@@ -119,16 +119,31 @@
       callback: _ => {
         document.body.classList.toggle('narrow-nav', _)
       }
+    }, {
+      value: 'element.hide-footer',
+      callback: _ => {
+        document.body.classList.toggle('hide-footer', _)
+      }
     }].forEach( _ => _.callback(config.get(_.value)) )
   }
 
   const setFooterVisibility = function setFooterVisibility() {
-    let f = window.config.get('footer')
-    let k = Object.keys(f)
-    k
-      .filter(_ => _ !== 'recover')
-      .forEach(_ => $(`.footer-${_}`, 0).classList.toggle('hidden', !f[_]))
-    return k.filter(_ => f[_]).length
+    let r = false
+    const f = window.config.get('footer')
+    for(let _ in f) {
+      if(_ === 'recover') {
+        continue
+      }
+      const el = $(`.footer-${_}`, 0)
+      if(f[_]) {
+        el.classList.remove('hidden')
+      } else {
+        el.classList.add('hidden')
+        r = true
+      }
+    }
+
+    return r
   }
 
   window.addEventListener('load', () => {
@@ -300,15 +315,16 @@
         window.l.setLang(config.get('lang'))
 
         window.renderer = new Renderer(window.config.get())
-        if(!window.tabdisplay)
-          window.tabdisplay = new TabDisplay()
+        if(hist.currentData) renderer.render(hist.currentData)
 
-        const count = {
-          footer: setFooterVisibility(),
-          tab: window.tabdisplay.render()
-        }
+        window.tabdisplay = new TabDisplay()
 
-        $('footer', 0).classList.toggle('hidden', count.footer === 0 && count.tab === 1)
+        $('footer', 0).classList.toggle('hidden',
+          window.config.get('element.hide-footer') ||
+         (window.config.get('element.use-header-instead') ||
+          setFooterVisibility() === 0) &&
+          window.tabdisplay.render() === 1
+        )
 
         loadFormatButtons()
         return

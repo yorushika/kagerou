@@ -43,8 +43,14 @@
         "combine_pet": "Begleiter zusammenfassen",
         "split-by-comma": "Mehrfache Namen mit ',' trennen",
         "basic": "Allgemeine Einstellungen",
-        "footer": {
+        "footer-visibility": {
           "_": "Fußzeile",
+          "show": "*Show as normal",
+          "use-header-instead": "*Oben anzeigen",
+          "hide": "*Nicht zeigen"
+        },
+        "footer": {
+          "_": "Fußzeilenelemente",
           "rank": "Derzeitiger Rang",
           "rdps": "Raid DPS",
           "rhps": "Raid HPS",
@@ -87,8 +93,6 @@
       "color": {
         "_": "Balkenfarben",
         "reset-this": "Farben zurücksetzen",
-        "position": "Rollen-Farbe",
-        "position-none": "Ausblenden mit 'none'",
         "etc": "Sonstiges",
         "pet-buddy": "Begleiter"
       },
@@ -244,8 +248,8 @@
       "direct": ["DH", "*Direct Hit%"],
       "crit_direct": ["!!!", "*Critical Direct Hit% (!!!)"],
       "crittypes": ["D/!/!!!", "*Direct/Critical/!!! Count"],
-      "max": ["MaxD", "Maximaler Schaden (ohne Fähigkeitsname)"],
-      "maxskill": ["MaxDS", "Maximaler Schaden Fähigkeitsname"],
+      "max": ["Max", "Maximaler Schaden (ohne Fähigkeitsname)"],
+      "maxskill": ["Max", "Maximaler Schaden Fähigkeitsname"],
       "maxhit": ["MaxSchaden", "Maximaler Schaden (mit Fähigkeitsname)"],
       "last10": ["10s", "DPS der letzten 10s"],
       "last30": ["30s", "DPS der letzten 30s"],

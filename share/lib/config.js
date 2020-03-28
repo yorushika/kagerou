@@ -1,11 +1,11 @@
 'use strict'
 
-const VERSION = '0.8.0'
-const CODENAME = 'Fireworks In The Summer End'
-const DESCRIPTION = '\'遠回りの先　これが最後の話\''
+const VERSION = '0.8.2'
+const CODENAME = 'point zero'
+const DESCRIPTION = '「ゼロからスタートする」'
 
 const CONFIG_DEFAULT = {
-  lang: 'cn',
+  lang: 'ko',
   style: {
     // body
     'resize-factor': 1,
@@ -133,9 +133,6 @@ const CONFIG_DEFAULT = {
   color: {
     'gauge-default': '#444',
     'gauge-opacity': '1',
-    'position-tank': 'rgb(33, 150, 243)',
-    'position-deal': 'rgb(244, 67, 54)',
-    'position-heal': 'rgb(139, 195, 74)',
     pld: 'rgb(21, 28, 100)', // Indigo 900 (B -10%)
     war: 'rgb(153, 23, 23)', // Red 900 (B -10%)
     drk: 'rgb(136, 14, 79)', // Pink 900
@@ -181,7 +178,9 @@ const CONFIG_DEFAULT = {
   },
   element: {
     'resize-handle': true,
-    'narrow-nav': false
+    'narrow-nav': false,
+    'hide-footer': false,
+    'use-header-instead': false
   },
   footer: {
     rank: true,
@@ -367,8 +366,7 @@ const COLUMN_INDEX = {
         if(isNaN(_)) {
           return '---'
         }
-        const decimals = +conf.format.significant_digit.dps
-        return formatDps(_, decimals)
+        return formatDps(_, +conf.format.significant_digit.dps)
       }
     },
     pct: {
@@ -381,27 +379,38 @@ const COLUMN_INDEX = {
     },
     total: 'damage',
     failure: {
-      v: _ => _.swings > 0? _.misses/_.swings * 100 : -1,
-      f: (_, conf) => _ < 0? '-' :  _.toFixed(conf.format.significant_digit.accuracy) + (conf.format.use_tailing_pct? '<small>%</small>' : '')
+      v: _ => _.swings > 0? _.misses / _.swings * 100 : -1,
+      f: (_, conf) =>
+        _ < 0?
+          '-' : _.toFixed(conf.format.significant_digit.accuracy) +
+          (conf.format.use_tailing_pct? '<small>%</small>' : '')
     },
     accuracy: {
       v: _ => _.swings > 0? (1 - _.misses/_.swings) * 100 : -1,
-      f: (_, conf) => _ < 0? '-' :  _.toFixed(conf.format.significant_digit.accuracy) + (conf.format.use_tailing_pct? '<small>%</small>' : '')
+      f: (_, conf) =>
+        _ < 0?
+          '-' :  _.toFixed(conf.format.significant_digit.accuracy) +
+          (conf.format.use_tailing_pct? '<small>%</small>' : '')
     },
     swing: 'swings',
     miss: 'misses',
     hitfail: 'hitfailed',
     critical: {
       v: _ => (parseInt(_.crithits) || 0) / (parseInt(_.swings) || 1) * 100,
-      f: (_, conf) => _.toFixed(conf.format.significant_digit.critical) + (conf.format.use_tailing_pct? '<small>%</small>' : '')
+      f: (_, conf) => _.toFixed(conf.format.significant_digit.critical) +
+                      (conf.format.use_tailing_pct? '<small>%</small>' : '')
     },
     direct: {
       v: _ => 'DirectHitCount' in _? (parseInt(_.DirectHitCount) || 0) / (parseInt(_.swings) || 1) * 100 : null,
-      f: (_, conf) => _ !== null? _.toFixed(conf.format.significant_digit.critical) + (conf.format.use_tailing_pct? '<small>%</small>' : '') : '-'
+      f: (_, conf) => _ !== null?
+        _.toFixed(conf.format.significant_digit.critical) +
+        (conf.format.use_tailing_pct? '<small>%</small>' : '') : '-'
     },
     crit_direct: {
       v: _ => 'CritDirectHitCount' in _? (parseInt(_.CritDirectHitCount) || 0) / (parseInt(_.swings) || 1) * 100 : null,
-      f: (_, conf) => _ !== null? _.toFixed(conf.format.significant_digit.critical) + (conf.format.use_tailing_pct? '<small>%</small>' : '') : '-'
+      f: (_, conf) => _ !== null?
+        _.toFixed(conf.format.significant_digit.critical) +
+        (conf.format.use_tailing_pct? '<small>%</small>' : '') : '-'
     },
     crittypes: {
       v: _ => [_.DirectHitCount || '-', _.crithits || '-', _.CritDirectHitCount || '-'],
@@ -478,7 +487,7 @@ const COLUMN_INDEX = {
     total: 'healed',
     over: {
       v: _ => _['OverHealPct'],
-      f: _ => _.replace('%', '<small>%</small>')
+      f: _ => _ && _.replace? _.replace('%', '<small>%</small>') : '---'
     },
     swing: 'heals',
     critical: {

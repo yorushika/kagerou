@@ -68,13 +68,23 @@ nav:hover > .container {
 
 #history-icon {
   vertical-align: top;
-  margin-right: 0;
+  padding-right: 0.25rem;
 
   fill: var(--color-accent);
 }
 #history-icon:hover {
   cursor: pointer;
   background: rgba(127, 127, 127, 0.5);
+}
+#history-region span {
+  margin-right: 0;
+}
+#history-region > span {
+  margin-left: 0.25rem;
+}
+#history-region > span > small,
+.smaller-lower-numbers #history-region .with-larger-digits {
+  font-size: 0.8em;
 }
 .icon-overflow-wrap {
   display: inline-block;
@@ -94,10 +104,9 @@ nav:hover > .container {
 .history mark, .history span {
   vertical-align: top;
   white-space: nowrap;
-  margin-right: 0.25rem;
   flex-grow: 0;
   flex-shrink: 0;
-  cursor: default;
+  cursor: inherit;
 }
 #history-region {
   flex-grow: 1;

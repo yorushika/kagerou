@@ -25,15 +25,15 @@
     constructor(config) {
       this.current = 0
 
-      this.standby = true
-      this.currentHistory = false
-      this.updateConfig(config)
-
       this.elem = {}
       this.acc = {
         rdps: config.format.significant_digit.dps,
         rhps: config.format.significant_digit.hps
       }
+
+      this.standby = true
+      this.currentHistory = false
+      this.updateConfig(config)
     }
 
     updateConfig(config) {
@@ -46,6 +46,32 @@
           current.sort = TAB_SORTBY_MIGRATE_MAPPING[current.sort]
         }
         this.tabs[k] = new Row(this.config.tabs[k])
+      }
+
+      const useHeader = this.config.element['use-header-instead']
+
+      if(useHeader) {
+        $('#history-region').innerHTML = [
+          this.config.footer.rank ?
+           '<span class="header-rank">0<small>/1</small></span>' : '',
+          this.config.footer.rdps ?
+           '<span><span class="header-rdps">0</span><small>rdps</small></span>' : '',
+          this.config.footer.rhps ?
+           '<span><span class="header-rhps">0</span><small>rhps</small></span>' : ''
+        ].join('')
+
+        $map('.footer-stat > span', el => {
+          el.classList.add('hidden')
+        })
+      } else {
+        $('#history-region').innerHTML = ''
+      }
+
+      for(let i in this.config.footer) {
+        if(i === 'recover' || !this.config.footer[i]) {
+          continue
+        }
+        this.elem[i] = useHeader? $('.header-' + i, 0) : $('#' + i)
       }
     }
 
@@ -73,21 +99,6 @@
     updateHeader() {
       let h = $('#header')
       h.parentNode.replaceChild(this.template.header, h)
-    }
-
-    updateFooter(d) {
-      let r = Object.keys(this.config.footer).filter(_ => _ !== 'recover' && this.config.footer[_])
-      for(let k of r) {
-        this.elem[k] = this.elem[k] || $('#' + k)
-        if(k == 'rank') {
-          this.elem[k].textContent = d[k]
-        } else {
-          animateNumber(this.elem[k], pFloat(d[k]) || 0, {
-            timeout: 266,
-            digit: this.acc[k]
-          })
-        }
-      }
     }
 
     update() {
@@ -128,15 +139,6 @@
     }
 
     render(data) {
-      // damn chromium 45
-
-      // history header
-      $('.history', 0).classList.toggle('enabled', !data.isCurrent)
-      $('.history', 0).classList.toggle('stopped', data.isActive === 'false')
-      $('#history-time').textContent = data.header.duration
-      $('#history-mob').textContent = data.header.title
-      $('#history-region').textContent = window.l.zone(data.header.CurrentZoneName)
-
       // columns
       let got = data.get(
         this.template.tab.sort,
@@ -167,11 +169,35 @@
 
       // footer (rdps, rhps)
 
-      this.updateFooter({
-        rank: rank + '/' + d.length,
-        rdps: data.header.encdps,
-        rhps: data.header.enchps
-      })
+      let rdps = data.header.encdps
+      let rhps = data.header.enchps
+
+      // history header
+      $('.history', 0).classList.toggle('enabled', !data.isCurrent)
+      $('.history', 0).classList.toggle('stopped', data.isActive === 'false')
+      $('#history-time').textContent = data.header.duration
+      $('#history-mob').textContent = data.header.title
+
+      if(!this.config.element['hide-footer'] ||
+          this.config.element['use-header-instead']) {
+        if(this.config.footer.rank) {
+          let el = this.elem.rank
+          el.firstChild.textContent = rank
+          el.lastChild.textContent = '/' + d.length
+        }
+        if(this.config.footer.rdps) {
+          this.elem.rdps.innerHTML =
+            formatDps(rdps, this.config.format.significant_digit.dps)
+        }
+        if(this.config.footer.rhps) {
+          this.elem.rhps.innerHTML =
+            formatDps(rhps, this.config.format.significant_digit.hps)
+        }
+      }
+
+      if(!this.config.element['use-header-instead']) {
+        $('#history-region').textContent = window.l.zone(data.header.CurrentZoneName)
+      }
     }
 
   }

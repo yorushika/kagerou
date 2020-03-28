@@ -43,6 +43,12 @@
         "combine_pet": "Fusion familier",
         "split-by-comma": "Diviser les noms composés par ','",
         "basic": "Basique",
+        "footer-visibility": {
+          "_": "Pied de page",
+          "show": "*Show as normal",
+          "use-header-instead": "*Use header, for elements instead",
+          "hide": "*Hide"
+        },
         "footer": {
           "_": "Eléments de pied de page",
           "rank": "Rang courant",
@@ -87,8 +93,6 @@
       "color": {
         "_": "Couleurs",
         "reset-this": "Reinitialiser les couleurs",
-        "position": "Aide position",
-        "position-none": "Définissez 'aucun' pour supprimer.",
         "etc": "Etc",
         "pet-buddy": "Familiers/Camarades"
       },
@@ -244,9 +248,9 @@
       "direct": ["DH", "Directe %"],
       "crit_direct": ["!!!", "Critique Hit% (!!!)"],
       "crittypes": ["D/!/!!!", "Direct/Critical/!!! Count"],
-      "max": ["MaxD", "Maxhit (w/o skillname)"],
-      "maxskill": ["MaxDS", "Maxhit (Nom de compétence seulement)"],
-      "maxhit": ["MaxDamage", "Maxhit"],
+      "max": ["Max", "Maxhit (w/o skillname)"],
+      "maxskill": ["Max", "Maxhit (Nom de compétence seulement)"],
+      "maxhit": ["Maxhit", "Maxhit"],
       "last10": ["10s", "DPS des 10 dernières secondes"],
       "last30": ["30s", "DPS des 30 dernières secondes"],
       "last60": ["1m", "DPS de la dernière minute"],

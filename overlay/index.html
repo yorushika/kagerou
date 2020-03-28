@@ -79,18 +79,10 @@ window.addEventListener('load', e => {
     window.renderer = new Renderer(window.config.get())
     window.renderer.updateHeader()
 
-    try {
-      window.tabdisplay = new TabDisplay()
-      tabdisplay.render()
-    } catch(e) {
-      setTimeout(_ => {
-        window.tabdisplay = new TabDisplay()
-        tabdisplay.render()
-      }, 200)
-    }
-
+    window.tabdisplay = new TabDisplay()
     window.historyUI = new HistoryUI()
 
+    window.tabdisplay.render()
     $('.history', 0).addEventListener('click', e => {
       window.historyUI.updateList()
     })
@@ -99,11 +91,9 @@ window.addEventListener('load', e => {
     layer.connect()
     layer.on('data', d => {
       window.hist.push(d)
-      if(!window.renderer) { // why why
-        window.renderer = new Renderer(window.config.get())
-        window.renderer.updateHeader()
+      if(window.renderer) {
+        window.renderer.update()
       }
-      window.renderer.update()
     })
     layer.on('status', d => {
       if(d.type === 'lock') {
@@ -113,6 +103,7 @@ window.addEventListener('load', e => {
         )
       }
     })
+    // layer.emit('restyle')
   })
 
   $map('svg', _ => {
@@ -166,8 +157,8 @@ window.addEventListener('load', e => {
               kagerou <span class="version"> ??? </span>
             </mark>
           </span>
-          <span id="history-mob"></span>
-          <span id="history-region" class="codename"></span>
+          <span id="history-mob" class="codename"></span>
+          <span id="history-region"></span>
         </div>
         <ul class="buttons">
           <li class="button" data-button="toggle-detail"
@@ -197,14 +188,9 @@ window.addEventListener('load', e => {
 
       <ul class="dropdown dropdown-list dropdown-history" id="dropdown-history">
         <li class="empty">
-          <mark> 0.7.25 </mark> <span> Remind Blue </span>
+          <mark> 0.8.1 </mark> <span> end of world </span>
           <br />
-          <span class="history-region"> '君の歌った「大人が嫌いな歌」を' </span>
-        </li>
-        <li class="empty">
-          <mark> 0.7.26 </mark> <span>Lost-day Hours</span>
-          <br/>
-          <span class="history-region"> '今日も夕ご飯のことを考える' </span>
+          <span class="history-region"> FRENZY HOUSE </span>
         </li>
         <li class="empty">
           <mark class="version"> ?.?.? </mark> <span class="codename">Unknown Release</span>
@@ -328,6 +314,35 @@ window.addEventListener('load', e => {
                  viewBox="0 0 416 128"
                  style="max-width: 100%; max-height: 3rem; margin-top: 0.5rem">
             </svg -->
+            <h3> 0.8.2 'point zero' - 2019/12/14 </h3>
+
+            <p>
+              <span class="lang ko">푸터를 숨길 수 있습니다</span>
+              <span class="lang en de fr cn">Added option to hide footer</span>
+              <span class="lang ja">下部の黒い棒を非表示するができます。</span>
+              (<u onclick="config.toggle('element.hide-footer'); config.save(); layer.emit('message', { message: 'restyle' })">test</u>)
+            </p>
+
+            <p>
+              <span class="lang ko">rdps를 위쪽에 띄울 수 있습니다</span>
+              <span class="lang en de fr cn">...and display RDPS on top</span>
+              <span class="lang ja">右下のrdpsや1/nのようなことを上に表示するができます</span>
+
+              (<u onclick="config.toggle('element.use-header-instead'); config.save(); layer.emit('message', { message: 'restyle' })">test</u>)
+            </p>
+
+            <h3> 0.8.1 'end of world' - 2019/12/14 </h3>
+
+            <p class="lang ko">
+              하단부 숫자 표시에 "1000 이하 숫자 작게" 옵션이 적용되지 않는 문제 수정
+            </p>
+            <p class="lang en de fr cn">
+              Fixed bug that "smaller fonts on number 1000" doesn't apply on
+              footer rdps section
+            </p>
+            <p class="lang ja">
+              下部の数字の表示にオプションが適用されないことを修正
+            </p>
 
             <h3 class="lang ko"> 0.8.0 '잊어버리고 만 여름의 끝에' - 2019/07/01 </h3>
             <h3 class="lang en de fr cn"> 0.8.0 'Fireworks In The Summer End' - 2019/07/01 </h3>
@@ -372,33 +387,6 @@ window.addEventListener('load', e => {
             <p class="lang ja">
               タブが一つだけで、「下部バーの項目」がすべてオフになっている場合、下部バーを表示しません
             </p>
-
-
-
-            <h3 class="lang ko"> 0.7.26 '로스트 데이 아워' - 2019/07/01 </h3>
-            <h3 class="lang en de fr cn"> 0.7.26 'Lost-day Hours' - 2019/07/01 </h3>
-            <h3 class="lang ja"> 0.7.26 'ロストデイアワー' - 2019/07/01 </h3>
-
-            <p class="lang ko"> 무희의 스킬명 약칭을 추가 </p>
-            <p class="lang en"> Added DNC skill name abbreviation </p>
-            <!-- <p class="lang ja"> 踊り子のスキル名略称を追加 </p> -->
-
-            <p class="lang ko"> 직업이 있는 경우 소환수로 취급하지 않음 </p>
-            <p class="lang en de fr cn"> Will not merge 'pets' if it has valid job </p>
-            <p class="lang ja"> ジョブがある場合、召喚獣ではないものとして取り扱う </p>
-
-            <h3 class="lang ko"> 0.7.25 '리마인드 블루' - 2019/07/01 </h3>
-            <h3 class="lang en de fr cn"> 0.7.25 'Remind Blue' - 2019/07/01 </h3>
-            <h3 class="lang ja"> 0.7.25 'リマインドブルー' - 2019/07/01 </h3>
-
-            <p> GNB / DNC </p>
-
-            <h3 class="lang ko"> 0.7.24 '이매지너리 리로드' - 2019/06/22 </h3>
-            <h3 class="lang en de fr cn"> 0.7.24 'Imaginary Reload' - 2019/06/22 </h3>
-            <h3 class="lang ja"> 0.7.24 'イマジナリーリロード' - 2019/06/22 </h3>
-
-            <p> BLU support </p>
-
           </li>
         </ul>
       </ul>
@@ -408,13 +396,13 @@ window.addEventListener('load', e => {
         </div>
         <span class="footer-stat">
           <span class="footer-rank">
-            <span id="rank">0/0</span>
+            <span id="rank">0<small>/0</small></span>
           </span><!--
        --><span class="footer-rdps">
-            <span id="rdps">0</span>dps
+            <span id="rdps">0</span><small>dps</small>
           </span><!--
        --><span class="footer-rhps">
-            <span id="rhps">0</span>hps
+            <span id="rhps">0</span><small>hps</small>
           </span>
         </span>
       </footer>

@@ -80,25 +80,6 @@
   font-size: 1em;
 }
 
-/* Position Helpers */
-.class-gld .gauge,
-.class-gla .gauge, .class-pld .gauge, .class-mrd .gauge,
-.class-war .gauge, .class-drk .gauge, .class-gnb .gauge { /* tank; blue 500 */
-  box-shadow: 0.25rem 0 0 var(--position-tank) inset;
-}
-.class-pgl .gauge, .class-mnk .gauge, .class-lnc .gauge,
-.class-drg .gauge, .class-arc .gauge, .class-brd .gauge,
-.class-rog .gauge, .class-nin .gauge, .class-acn .gauge,
-.class-smn .gauge, .class-thm .gauge, .class-blm .gauge,
-.class-mch .gauge, .class-sam .gauge, .class-rdm .gauge,
-.class-blm .gauge, .class-dnc .gauge { /* deal; red 500 */
-  box-shadow: 0.25rem 0 0 var(--position-deal) inset;
-}
-.class-cnj .gauge, .class-whm .gauge, .class-sch .gauge,
-.class-ast .gauge { /* heal; light green 500 */
-  box-shadow: 0.25rem 0 0 var(--position-heal) inset;
-}
-
 /* Colors */
 .gauge {
   background: var(--gauge-default);
@@ -119,6 +100,7 @@
 .class-mch .gauge { background: var(--mch); }
 .class-sam .gauge { background: var(--sam); }
 .class-rdm .gauge { background: var(--rdm); }
+.class-blu .gauge { background: var(--blu); }
 .class-dnc .gauge { background: var(--dnc); }
 
 .class-cnj .gauge, .class-whm .gauge { background: var(--whm); }
@@ -270,6 +252,9 @@ main > ul {
 #table {
   padding-bottom: 1.5rem;
 }
+.hide-footer #table {
+  padding-bottom: 0.2rem;
+}
 #table > li {
   display: flex;
   flex-direction: row;
@@ -331,6 +316,9 @@ footer {
   position: absolute;
   bottom: 0;
 }
+.hide-footer footer {
+  display: none;
+}
 .tabs {
   padding: 0 !important;
   flex-grow: 0 !important;
@@ -358,9 +346,19 @@ footer {
   padding: 0 0.25rem;
   border-left: 0.1rem solid rgba(255, 255, 255, 0.5);
 }
+.footer-stat small,
+body.smaller-lower-numbers .footer-stat small.with-larger-digits {
+  font-size: 0.75em;
+}
+.footer-stat.dps {
+  font-size: 1em;
+}
 
 .collapsed main {
   height: calc(var(--graph-height) * 2);
+}
+.hide-footer.collapsed main {
+  height: calc(var(--graph-height) + 0.2rem);
 }
 .collapsed #table {
   height: var(--graph-height);
